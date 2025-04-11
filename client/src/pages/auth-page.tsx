@@ -54,6 +54,7 @@ export default function AuthPage() {
       email: "",
       password: "",
       confirmPassword: "",
+      avatarUrl: ""
     },
   });
 
@@ -78,8 +79,22 @@ export default function AuthPage() {
   };
 
   const onRegisterSubmit = (values: z.infer<typeof registerSchema>) => {
+    // Log the form values for debugging
+    console.log("Register form values:", values);
+    
     const { confirmPassword, ...userData } = values;
-    registerMutation.mutate(userData);
+    
+    // Ensure values are properly trimmed and default to empty string instead of null
+    const processedData = {
+      username: values.username.trim(),
+      password: values.password,
+      displayName: values.displayName?.trim() || "",
+      email: values.email?.trim() || "",
+      avatarUrl: values.avatarUrl?.trim() || ""
+    };
+    
+    console.log("Processed register data:", processedData);
+    registerMutation.mutate(processedData);
   };
 
   return (
