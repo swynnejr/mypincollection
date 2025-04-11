@@ -9,11 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import { AlertCircle, CheckCircle2, RefreshCw } from "lucide-react";
+import { AlertCircle, CheckCircle2, RefreshCw, Database, Search } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 
 // This admin page is for reseeding the database with sample Disney pin data.
 // Only the user with ID 1 (admin) can access this page.
@@ -147,6 +147,61 @@ export default function AdminPage(): React.ReactElement {
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm font-medium">Status</p>
                     <p className="text-xl text-green-500">Connected</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>eBay Integration</CardTitle>
+            <CardDescription>
+              Import authentic Disney pin data from eBay
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex flex-col space-y-2">
+                <h3 className="text-lg font-medium">Pin Import Tool</h3>
+                <p className="text-sm text-muted-foreground">
+                  Search for authentic Disney pins on eBay and import them into your database with real images.
+                </p>
+                
+                <div className="mt-4">
+                  <Link href="/admin/ebay-import">
+                    <Button>
+                      <Search className="mr-2 h-4 w-4" />
+                      eBay Pin Import Tool
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              
+              <Separator />
+              
+              <div>
+                <h3 className="text-lg font-medium mb-2">Recommended Searches</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="p-4 bg-muted rounded-lg">
+                    <p className="text-sm font-medium">Popular Collections</p>
+                    <ul className="list-disc list-inside text-sm mt-2 space-y-1">
+                      <li>Disney Mickey and Friends pins</li>
+                      <li>Disney Princess pins</li>
+                      <li>Disney Villains pins</li>
+                      <li>Star Wars Disney pins</li>
+                      <li>Disney Parks attraction pins</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 bg-muted rounded-lg">
+                    <p className="text-sm font-medium">Search Tips</p>
+                    <ul className="list-disc list-inside text-sm mt-2 space-y-1">
+                      <li>Include "Disney pin" in your search</li>
+                      <li>Add specific character names</li>
+                      <li>For better matches try "authentic Disney pin"</li>
+                      <li>For park exclusive pins try "Disney parks pin"</li>
+                    </ul>
                   </div>
                 </div>
               </div>

@@ -12,6 +12,7 @@ import PinDetailPage from "@/pages/pin-detail-page";
 import WantListPage from "@/pages/wantlist-page";
 import AdminPage from "@/pages/admin-page";
 import BrowsePage from "@/pages/browse-page";
+import EbayImportPage from "@/pages/ebay-import-page";
 import { ProtectedRoute } from "./lib/protected-route";
 import Layout from "@/components/layout";
 
@@ -28,6 +29,7 @@ function Router() {
             <ProtectedRoute path="/wantlist" component={WantListPage} />
             <ProtectedRoute path="/pin/:id" component={PinDetailPage} />
             <ProtectedRoute path="/admin" component={AdminPage} />
+            <ProtectedRoute path="/admin/ebay-import" component={EbayImportPage} />
             <Route component={NotFound} />
           </Switch>
         </Layout>
