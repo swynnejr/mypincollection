@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle (pin shape) -->
+  <circle cx="100" cy="100" r="95" fill="#E0E0E0" stroke="#A0A0A0" stroke-width="2" />
+  
+  <!-- Mickey silhouette -->
+  <circle cx="100" cy="100" r="45" fill="#A0A0A0" />
+  <circle cx="65" cy="65" r="25" fill="#A0A0A0" />
+  <circle cx="135" cy="65" r="25" fill="#A0A0A0" />
+  
+  <!-- Question mark -->
+  <text x="100" y="110" text-anchor="middle" font-family="Arial" font-size="60" font-weight="bold" fill="#FFFFFF">?</text>
+  
+  <!-- Text -->
+  <text x="100" y="170" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#808080">Pin Image Loading...</text>
+</svg>

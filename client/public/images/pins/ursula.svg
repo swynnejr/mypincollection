@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle (pin shape) -->
+  <circle cx="100" cy="100" r="95" fill="#4B0082" stroke="#000" stroke-width="2" />
+  
+  <!-- Ursula's body -->
+  <ellipse cx="100" cy="120" rx="60" ry="50" fill="#800080" />
+  
+  <!-- Ursula's face -->
+  <ellipse cx="100" cy="70" rx="30" ry="40" fill="#BDB76B" />
+  
+  <!-- Ursula's white hair -->
+  <path d="M 70 50 C 60 30, 90 20, 100 30 C 110 20, 140 30, 130 50" fill="#FFFFFF" />
+  
+  <!-- Ursula's red lips -->
+  <path d="M 80 90 Q 100 110 120 90" fill="#FF0000" />
+  
+  <!-- Ursula's eyes -->
+  <ellipse cx="85" cy="70" rx="7" ry="10" fill="#FFFFFF" />
+  <ellipse cx="115" cy="70" rx="7" ry="10" fill="#FFFFFF" />
+  <ellipse cx="85" cy="70" rx="3" ry="5" fill="#000000" />
+  <ellipse cx="115" cy="70" rx="3" ry="5" fill="#000000" />
+  
+  <!-- Ursula's eyeshadow -->
+  <path d="M 75 60 Q 85 55 95 60" fill="none" stroke="#0000FF" stroke-width="3" />
+  <path d="M 125 60 Q 115 55 105 60" fill="none" stroke="#0000FF" stroke-width="3" />
+  
+  <!-- Ursula's tentacles -->
+  <path d="M 60 170 C 40 160, 60 130, 80 150" fill="#800080" />
+  <path d="M 80 170 C 70 150, 90 140, 100 160" fill="#800080" />
+  <path d="M 120 170 C 110 150, 130 140, 140 160" fill="#800080" />
+  <path d="M 140 170 C 160 160, 140 130, 120 150" fill="#800080" />
+  
+  <!-- Ursula's shell necklace -->
+  <ellipse cx="100" cy="110" rx="15" ry="10" fill="#FFD700" />
+  
+  <!-- Text -->
+  <text x="100" y="190" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#FFFFFF">Ursula Sea Witch</text>
+</svg>

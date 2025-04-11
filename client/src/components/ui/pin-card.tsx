@@ -71,7 +71,13 @@ export function PinCard({
           <img 
             src={imageUrl || "/placeholder-pin.jpg"} 
             alt={name} 
-            className="w-full aspect-square object-cover"
+            className="w-full aspect-square object-contain bg-background"
+            onError={(e) => {
+              console.log(`Error loading image: ${imageUrl}`);
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.src = "/placeholder-pin.jpg";
+            }}
           />
         </Link>
         <div className="absolute top-2 right-2 flex flex-col gap-1">

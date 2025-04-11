@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle (pin shape) -->
+  <circle cx="100" cy="100" r="95" fill="#2F4F4F" stroke="#000" stroke-width="2" />
+  
+  <!-- Haunted Mansion building -->
+  <path d="M 40 140 L 40 80 L 160 80 L 160 140 Z" fill="#708090" />
+  
+  <!-- Mansion roof -->
+  <path d="M 30 80 L 100 40 L 170 80 Z" fill="#2F4F4F" />
+  
+  <!-- Mansion entrance -->
+  <rect x="85" y="110" width="30" height="30" fill="#000000" />
+  
+  <!-- Mansion windows -->
+  <rect x="50" y="90" width="15" height="20" fill="#4682B4" />
+  <rect x="75" y="90" width="15" height="20" fill="#4682B4" />
+  <rect x="110" y="90" width="15" height="20" fill="#4682B4" />
+  <rect x="135" y="90" width="15" height="20" fill="#4682B4" />
+  
+  <!-- Ghost 1 -->
+  <path d="M 60 60 C 50 70, 50 80, 60 90 C 70 80, 70 70, 60 60 Z" fill="#FFFFFF" opacity="0.7" />
+  <circle cx="55" cy="70" r="3" fill="#000000" />
+  <circle cx="65" cy="70" r="3" fill="#000000" />
+  
+  <!-- Ghost 2 -->
+  <path d="M 140 60 C 130 70, 130 80, 140 90 C 150 80, 150 70, 140 60 Z" fill="#FFFFFF" opacity="0.7" />
+  <circle cx="135" cy="70" r="3" fill="#000000" />
+  <circle cx="145" cy="70" r="3" fill="#000000" />
+  
+  <!-- Graveyard in front -->
+  <rect x="65" y="150" width="10" height="15" fill="#A9A9A9" />
+  <rect x="90" y="150" width="10" height="15" fill="#A9A9A9" />
+  <rect x="115" y="150" width="10" height="15" fill="#A9A9A9" />
+  
+  <!-- Spooky tree -->
+  <path d="M 30 140 C 20 120, 40 110, 30 100 C 50 110, 40 120, 50 140" fill="#000000" />
+  
+  <!-- Text -->
+  <text x="100" y="180" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#FFFFFF">Haunted Mansion</text>
+</svg>
