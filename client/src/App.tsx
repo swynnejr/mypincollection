@@ -11,6 +11,7 @@ import CollectionPage from "@/pages/collection-page";
 import PinDetailPage from "@/pages/pin-detail-page";
 import WantListPage from "@/pages/wantlist-page";
 import AdminPage from "@/pages/admin-page";
+import BrowsePage from "@/pages/browse-page";
 import { ProtectedRoute } from "./lib/protected-route";
 import Layout from "@/components/layout";
 
@@ -22,6 +23,7 @@ function Router() {
         <Layout>
           <Switch>
             <ProtectedRoute path="/" component={HomePage} />
+            <Route path="/browse" component={BrowsePage} />
             <ProtectedRoute path="/collection" component={CollectionPage} />
             <ProtectedRoute path="/wantlist" component={WantListPage} />
             <ProtectedRoute path="/pin/:id" component={PinDetailPage} />

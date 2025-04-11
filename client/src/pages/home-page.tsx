@@ -229,7 +229,7 @@ export default function HomePage() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold">Discover Popular Pins</h2>
-          <Link href="/discover" className="text-sm text-primary">
+          <Link href="/browse" className="text-sm text-primary">
             View All
           </Link>
         </div>
