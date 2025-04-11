@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
@@ -38,12 +38,6 @@ export default function AuthPage() {
   const { theme } = useTheme();
   const [_, navigate] = useLocation();
 
-  // Redirect if already logged in
-  if (user) {
-    navigate("/");
-    return null;
-  }
-
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -62,6 +56,22 @@ export default function AuthPage() {
       confirmPassword: "",
     },
   });
+
+  // Reset form fields when switching between login and register
+  useEffect(() => {
+    if (authType === "login") {
+      loginForm.reset();
+    } else {
+      registerForm.reset();
+    }
+  }, [authType, loginForm, registerForm]);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const onLoginSubmit = (values: z.infer<typeof loginSchema>) => {
     loginMutation.mutate(values);
