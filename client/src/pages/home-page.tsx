@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useAuthStatus } from "@/lib/protected-route";
+import { AuthTooltip, LoginButton } from "@/components/ui/auth-tooltip";
 import {
   PinOff,
   Heart,
@@ -130,27 +132,36 @@ export default function HomePage() {
             </div>
             
             <div className="flex items-center gap-3">
-              <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
-                <Bell className="h-5 w-5" />
-                <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-[10px]">3</Badge>
-              </button>
+              <AuthTooltip>
+                <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
+                  <Bell className="h-5 w-5" />
+                  <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-[10px]">3</Badge>
+                </button>
+              </AuthTooltip>
               
-              <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
-                <MessageSquare className="h-5 w-5" />
-                <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-[10px]">2</Badge>
-              </button>
+              <AuthTooltip>
+                <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
+                  <MessageSquare className="h-5 w-5" />
+                  <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-[10px]">2</Badge>
+                </button>
+              </AuthTooltip>
               
               <ThemeSelector />
               
-              <div className="flex items-center gap-2">
-                <Avatar>
-                  <AvatarImage src={user?.avatarUrl || "https://i.pravatar.cc/150?img=32"} alt={user?.displayName || user?.username || "User"} />
-                  <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium hidden md:inline">
-                  {user?.displayName || user?.username}
-                </span>
-              </div>
+              {/* Show either user avatar or login button */}
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <Avatar>
+                    <AvatarImage src={user?.avatarUrl || "https://i.pravatar.cc/150?img=32"} alt={user?.displayName || user?.username || "User"} />
+                    <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium hidden md:inline">
+                    {user?.displayName || user?.username}
+                  </span>
+                </div>
+              ) : (
+                <LoginButton />
+              )}
             </div>
           </div>
           
