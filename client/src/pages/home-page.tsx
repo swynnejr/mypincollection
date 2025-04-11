@@ -112,11 +112,9 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <MobileSidebar />
-              <Link href="/">
-                <a className="flex items-center gap-2">
-                  <PinOff className="h-6 w-6 text-primary" />
-                  <h1 className="text-xl font-bold">Pin Portfolio</h1>
-                </a>
+              <Link href="/" className="flex items-center gap-2">
+                <PinOff className="h-6 w-6 text-primary" />
+                <h1 className="text-xl font-bold">Pin Portfolio</h1>
               </Link>
             </div>
             
@@ -286,8 +284,8 @@ export default function HomePage() {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">Discover Popular Pins</h2>
-                <Link href="/discover">
-                  <a className="text-sm text-primary">View All</a>
+                <Link href="/discover" className="text-sm text-primary">
+                  View All
                 </Link>
               </div>
               
@@ -303,7 +301,7 @@ export default function HomePage() {
                       <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <Button size="sm" variant="secondary" asChild>
                           <Link href={`/pin/${pin.id}`}>
-                            <a>View Details</a>
+                            View Details
                           </Link>
                         </Button>
                       </div>
@@ -333,8 +331,8 @@ export default function HomePage() {
             <div className="bg-card border border-border rounded-xl p-5 mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">Upcoming Pin Events</h2>
-                <Link href="/events">
-                  <a className="text-sm text-primary">View Calendar</a>
+                <Link href="/events" className="text-sm text-primary">
+                  View Calendar
                 </Link>
               </div>
               
