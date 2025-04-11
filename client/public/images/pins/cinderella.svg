@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle (pin shape) -->
+  <circle cx="100" cy="100" r="95" fill="#B0E0E6" stroke="#000" stroke-width="2" />
+  
+  <!-- Castle base -->
+  <rect x="50" y="130" width="100" height="40" fill="#B0C4DE" />
+  
+  <!-- Main castle towers -->
+  <rect x="60" y="90" width="20" height="40" fill="#B0C4DE" />
+  <rect x="90" y="60" width="20" height="70" fill="#B0C4DE" />
+  <rect x="120" y="90" width="20" height="40" fill="#B0C4DE" />
+  
+  <!-- Tower roofs -->
+  <polygon points="60,90 70,70 80,90" fill="#4169E1" />
+  <polygon points="90,60 100,40 110,60" fill="#4169E1" />
+  <polygon points="120,90 130,70 140,90" fill="#4169E1" />
+  
+  <!-- Windows -->
+  <rect x="65" y="100" width="10" height="15" fill="#87CEFA" />
+  <rect x="95" y="80" width="10" height="15" fill="#87CEFA" />
+  <rect x="125" y="100" width="10" height="15" fill="#87CEFA" />
+  
+  <!-- Castle entrance -->
+  <rect x="85" y="140" width="30" height="30" fill="#4169E1" />
+  <rect x="95" y="140" width="10" height="20" fill="#000000" />
+  
+  <!-- Small decorative towers -->
+  <rect x="50" y="110" width="10" height="20" fill="#B0C4DE" />
+  <rect x="140" y="110" width="10" height="20" fill="#B0C4DE" />
+  <polygon points="50,110 55,100 60,110" fill="#4169E1" />
+  <polygon points="140,110 145,100 150,110" fill="#4169E1" />
+  
+  <!-- Castle flags -->
+  <rect x="70" y="50" width="2" height="20" fill="#A9A9A9" />
+  <rect x="100" y="20" width="2" height="20" fill="#A9A9A9" />
+  <rect x="130" y="50" width="2" height="20" fill="#A9A9A9" />
+  <polygon points="72,50 80,55 72,60" fill="#FF69B4" />
+  <polygon points="102,20 110,25 102,30" fill="#FF69B4" />
+  <polygon points="132,50 140,55 132,60" fill="#FF69B4" />
+  
+  <!-- Text -->
+  <text x="100" y="190" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#000080">Cinderella Castle</text>
+</svg>

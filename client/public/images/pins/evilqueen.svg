@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle (pin shape) -->
+  <circle cx="100" cy="100" r="95" fill="#4B0082" stroke="#000" stroke-width="2" />
+  
+  <!-- Evil Queen's face -->
+  <ellipse cx="100" cy="85" rx="30" ry="40" fill="#FFE4C4" />
+  
+  <!-- Evil Queen's crown -->
+  <path d="M 70 60 L 80 45 L 90 60 L 100 45 L 110 60 L 120 45 L 130 60" fill="#FFD700" />
+  <rect x="70" y="60" width="60" height="10" fill="#FFD700" />
+  
+  <!-- Evil Queen's robe -->
+  <path d="M 70 95 C 60 140, 140 140, 130 95" fill="#800000" />
+  <path d="M 85 95 C 80 140, 120 140, 115 95" fill="#4B0082" />
+  
+  <!-- Evil Queen's collar -->
+  <path d="M 70 95 C 85 85, 115 85, 130 95" fill="#FFFFFF" />
+  
+  <!-- Evil Queen's eyes -->
+  <ellipse cx="85" cy="75" rx="5" ry="7" fill="#FFFFFF" />
+  <ellipse cx="115" cy="75" rx="5" ry="7" fill="#FFFFFF" />
+  <ellipse cx="85" cy="75" rx="2" ry="3" fill="#000000" />
+  <ellipse cx="115" cy="75" rx="2" ry="3" fill="#000000" />
+  
+  <!-- Evil Queen's eyebrows -->
+  <path d="M 75 65 L 95 70" stroke="#000000" stroke-width="2" />
+  <path d="M 125 65 L 105 70" stroke="#000000" stroke-width="2" />
+  
+  <!-- Evil Queen's mouth -->
+  <path d="M 90 90 Q 100 100 110 90" fill="#800000" />
+  
+  <!-- Magic Mirror -->
+  <rect x="60" y="120" width="80" height="50" rx="5" ry="5" fill="#C0C0C0" />
+  <rect x="70" y="130" width="60" height="30" fill="#000080" />
+  
+  <!-- Mirror face (subtle) -->
+  <ellipse cx="100" cy="145" rx="10" ry="10" fill="#00FFFF" opacity="0.5" />
+  
+  <!-- Text -->
+  <text x="100" y="185" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#FFFFFF">Evil Queen Mirror</text>
+</svg>
