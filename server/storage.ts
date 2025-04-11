@@ -12,7 +12,7 @@ import createMemoryStore from "memorystore";
 const MemoryStore = createMemoryStore(session);
 
 // Pin statistics interface
-interface PinStats {
+export interface PinStats {
   haveCount: number;
   wantCount: number;
 }
@@ -50,7 +50,7 @@ export interface IStorage {
   addPinPriceHistory(priceHistory: InsertPinPriceHistory): Promise<PinPriceHistory>;
   
   // Session Store
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
 }
 
 export class MemStorage implements IStorage {
@@ -61,7 +61,7 @@ export class MemStorage implements IStorage {
   private messages: Map<number, Message>;
   private pinPriceHistory: Map<number, PinPriceHistory>;
   
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
   currentId: { [key: string]: number };
 
   constructor() {
@@ -327,4 +327,8 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Import the database storage implementation
+import { DatabaseStorage } from "./database-storage";
+
+// Use the database storage instead of memory storage
+export const storage = new DatabaseStorage();
