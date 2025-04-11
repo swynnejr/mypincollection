@@ -4,7 +4,7 @@ import { useParams, Link } from "wouter";
 import { Pin, PinPriceHistory } from "@shared/schema";
 import { Sidebar, MobileSidebar } from "@/components/ui/sidebar";
 import { ThemeSelector } from "@/components/ui/theme-selector";
-import { PriceChart } from "@/components/ui/price-chart";
+import { PriceHistoryChart } from "@/components/ui/price-history-chart";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -465,9 +465,7 @@ export default function PinDetailPage() {
                         )}
                       </div>
                       
-                      <div className="h-[150px]">
-                        <PriceChart pinId={pin.id} height={150} />
-                      </div>
+                      <PriceHistoryChart pinId={pin.id} pinName={pin.name} />
                     </CardContent>
                   </Card>
                   
