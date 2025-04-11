@@ -9,6 +9,28 @@ import { z } from "zod";
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication routes
   setupAuth(app);
+  
+  // Admin routes
+  app.post("/api/admin/reseed-database", async (req, res) => {
+    try {
+      if (storage.reseedDatabase) {
+        await storage.reseedDatabase();
+        res.json({ success: true, message: "Database reseeded successfully" });
+      } else {
+        res.status(501).json({ 
+          success: false, 
+          message: "Reseed functionality not available with current storage implementation" 
+        });
+      }
+    } catch (err) {
+      console.error("Error reseeding database:", err);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to reseed database",
+        error: err instanceof Error ? err.message : String(err)
+      });
+    }
+  });
 
   // Pin routes
   app.get("/api/pins", async (req, res) => {

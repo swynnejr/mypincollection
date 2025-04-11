@@ -10,6 +10,7 @@ import AuthPage from "@/pages/auth-page";
 import CollectionPage from "@/pages/collection-page";
 import PinDetailPage from "@/pages/pin-detail-page";
 import WantListPage from "@/pages/wantlist-page";
+import AdminPage from "@/pages/admin-page";
 import { ProtectedRoute } from "./lib/protected-route";
 import Layout from "@/components/layout";
 

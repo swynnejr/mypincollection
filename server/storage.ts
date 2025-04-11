@@ -50,6 +50,9 @@ export interface IStorage {
   getPinPriceHistory(pinId: number): Promise<PinPriceHistory[]>;
   addPinPriceHistory(priceHistory: InsertPinPriceHistory): Promise<PinPriceHistory>;
   
+  // Database management methods
+  reseedDatabase?(): Promise<void>;
+  
   // Session Store
   sessionStore: session.Store;
 }
