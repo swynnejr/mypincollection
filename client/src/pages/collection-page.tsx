@@ -1,14 +1,11 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Pin, UserPin, insertUserPinSchema } from "@shared/schema";
+import { Pin, UserPin } from "@shared/schema";
 import { useState } from "react";
 import { Link } from "wouter";
-import { Sidebar, MobileSidebar } from "@/components/ui/sidebar";
-import { ThemeSelector } from "@/components/ui/theme-selector";
 import { PinCard } from "@/components/ui/pin-card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { 
@@ -30,10 +27,7 @@ import {
 import {
   PinOff,
   Search,
-  Bell,
-  MessageSquare,
   Plus,
-  Filter,
 } from "lucide-react";
 
 export default function CollectionPage() {
@@ -137,242 +131,220 @@ export default function CollectionPage() {
   ) || [];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <MobileSidebar />
-              <Link href="/">
-                <a className="flex items-center gap-2">
-                  <PinOff className="h-6 w-6 text-primary" />
-                  <h1 className="text-xl font-bold">Pin Portfolio</h1>
-                </a>
-              </Link>
-            </div>
-            
-            <div className="hidden md:block flex-1 max-w-md mx-4">
-              <div className="relative">
-                <Input
-                  type="text" 
-                  placeholder="Search your pin collection..." 
-                  className="pl-10"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-0 right-0 text-xs bg-primary text-white rounded-full h-4 w-4 flex items-center justify-center">3</span>
-              </button>
-              
-              <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
-                <MessageSquare className="h-5 w-5" />
-                <span className="absolute top-0 right-0 text-xs bg-primary text-white rounded-full h-4 w-4 flex items-center justify-center">2</span>
-              </button>
-              
-              <ThemeSelector />
-              
-              <div className="flex items-center gap-2">
-                <Avatar>
-                  <AvatarImage src={user?.avatarUrl || "https://i.pravatar.cc/150?img=32"} alt={user?.displayName || user?.username || "User"} />
-                  <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium hidden md:inline">
-                  {user?.displayName || user?.username}
-                </span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="md:hidden mt-3">
-            <div className="relative">
-              <Input
-                type="text" 
-                placeholder="Search your pin collection..." 
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
-          </div>
-        </div>
-      </header>
-      
-      <div className="flex-1 flex relative">
-        {/* Sidebar */}
-        <div className="hidden md:block">
-          <Sidebar />
+    <div className="container mx-auto px-4 py-6">
+      {/* Collection Header */}
+      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">My Pin Collection</h1>
+          <p className="text-sm text-muted-foreground">
+            {userPins?.length || 0} pins in your collection • Total value: ${
+              (userPins?.reduce((sum, up) => sum + (up.pin.currentValue || 0), 0) || 0).toFixed(2)
+            }
+          </p>
         </div>
         
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          <div className="container mx-auto">
-            {/* Collection Header */}
-            <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold mb-2">My Pin Collection</h1>
-                <p className="text-sm text-muted-foreground">
-                  {userPins?.length || 0} pins in your collection • Total value: ${
-                    (userPins?.reduce((sum, up) => sum + (up.pin.currentValue || 0), 0) || 0).toFixed(2)
-                  }
-                </p>
-              </div>
-              
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="md:self-start">
-                    <Plus className="mr-2 h-4 w-4" /> Add Pin
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add Pin to Collection</DialogTitle>
-                    <DialogDescription>
-                      Select a pin to add to your collection.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="max-h-[60vh] overflow-y-auto space-y-4 my-4">
-                    {isLoadingAllPins ? (
-                      <div className="text-center py-8">Loading pins...</div>
-                    ) : pinsNotInCollection.length === 0 ? (
-                      <div className="text-center py-8">No more pins available to add</div>
-                    ) : (
-                      pinsNotInCollection.map(pin => (
-                        <div 
-                          key={pin.id} 
-                          className="flex items-center gap-3 p-2 border border-border rounded-md"
-                        >
-                          <img 
-                            src={pin.imageUrl} 
-                            alt={pin.name} 
-                            className="w-12 h-12 object-cover rounded-md"
-                          />
-                          <div className="flex-1">
-                            <h3 className="font-medium">{pin.name}</h3>
-                            <p className="text-xs text-muted-foreground">{pin.collection}</p>
-                          </div>
-                          <Button 
-                            size="sm" 
-                            onClick={() => addToCollectionMutation.mutate(pin.id)}
-                            disabled={addToCollectionMutation.isPending}
-                          >
-                            Add
-                          </Button>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                  <DialogFooter>
-                    <DialogTrigger asChild>
-                      <Button variant="outline">Close</Button>
-                    </DialogTrigger>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-            
-            {/* Collection Filters */}
-            <div className="mb-6">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button 
-                    variant={filter === "all" ? "default" : "outline"}
-                    onClick={() => setFilter("all")}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="md:self-start">
+              <Plus className="mr-2 h-4 w-4" /> Add Pin
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Pin to Collection</DialogTitle>
+              <DialogDescription>
+                Select a pin to add to your collection.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="max-h-[60vh] overflow-y-auto space-y-4 my-4">
+              {isLoadingAllPins ? (
+                <div className="text-center py-8">Loading pins...</div>
+              ) : pinsNotInCollection.length === 0 ? (
+                <div className="text-center py-8">No more pins available to add</div>
+              ) : (
+                pinsNotInCollection.map(pin => (
+                  <div 
+                    key={pin.id} 
+                    className="flex items-center gap-3 p-2 border border-border rounded-md"
                   >
-                    All Pins
-                  </Button>
-                  <Button 
-                    variant={filter === "limited-edition" ? "default" : "outline"}
-                    onClick={() => setFilter("limited-edition")}
-                  >
-                    Limited Edition
-                  </Button>
-                  <Button 
-                    variant={filter === "classic disney" ? "default" : "outline"}
-                    onClick={() => setFilter("classic disney")}
-                  >
-                    Classic Disney
-                  </Button>
-                  <Button 
-                    variant={filter === "star wars" ? "default" : "outline"}
-                    onClick={() => setFilter("star wars")}
-                  >
-                    Star Wars
-                  </Button>
-                  <Button 
-                    variant={filter === "marvel" ? "default" : "outline"}
-                    onClick={() => setFilter("marvel")}
-                  >
-                    Marvel
-                  </Button>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">Sort by:</span>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="recently-added">Recently Added</SelectItem>
-                      <SelectItem value="highest-value">Highest Value</SelectItem>
-                      <SelectItem value="lowest-value">Lowest Value</SelectItem>
-                      <SelectItem value="oldest-first">Oldest First</SelectItem>
-                      <SelectItem value="a-z">A-Z</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-            
-            {/* Pin Collection Grid */}
-            {isLoadingUserPins ? (
-              <div className="text-center py-16">
-                <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                <p>Loading your collection...</p>
-              </div>
-            ) : sortedPins?.length === 0 ? (
-              <div className="text-center py-16 bg-card rounded-lg border border-border">
-                <PinOff className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Your collection is empty</h2>
-                <p className="text-muted-foreground mb-6">Start building your pin collection today</p>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="mr-2 h-4 w-4" /> Add Your First Pin
+                    <img 
+                      src={pin.imageUrl} 
+                      alt={pin.name} 
+                      className="w-12 h-12 object-cover rounded-md"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-medium">{pin.name}</h3>
+                      <p className="text-xs text-muted-foreground">{pin.collection}</p>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      onClick={() => addToCollectionMutation.mutate(pin.id)}
+                      disabled={addToCollectionMutation.isPending}
+                    >
+                      Add
                     </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    {/* Same dialog content as above */}
-                  </DialogContent>
-                </Dialog>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {sortedPins.map((userPin) => (
-                  <PinCard 
-                    key={userPin.id} 
-                    pin={userPin.pin} 
-                    inCollection={true}
-                    stats={{ 
-                      haveCount: Math.floor(Math.random() * 1000), 
-                      wantCount: Math.floor(Math.random() * 500)
-                    }}
-                    onToggleCollection={() => removeFromCollectionMutation.mutate(userPin.pinId)}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        </main>
+                  </div>
+                ))
+              )}
+            </div>
+            <DialogFooter>
+              <DialogTrigger asChild>
+                <Button variant="outline">Close</Button>
+              </DialogTrigger>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
+      
+      {/* Collection Filters */}
+      <div className="mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="relative w-full md:w-64 mb-4 md:mb-0">
+            <Input
+              type="text" 
+              placeholder="Search your pin collection..." 
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          </div>
+          
+          <div className="flex flex-wrap items-center gap-2">
+            <Button 
+              variant={filter === "all" ? "default" : "outline"}
+              onClick={() => setFilter("all")}
+              size="sm"
+            >
+              All Pins
+            </Button>
+            <Button 
+              variant={filter === "limited-edition" ? "default" : "outline"}
+              onClick={() => setFilter("limited-edition")}
+              size="sm"
+            >
+              Limited Edition
+            </Button>
+            <Button 
+              variant={filter === "classic disney" ? "default" : "outline"}
+              onClick={() => setFilter("classic disney")}
+              size="sm"
+            >
+              Classic Disney
+            </Button>
+            <Button 
+              variant={filter === "star wars" ? "default" : "outline"}
+              onClick={() => setFilter("star wars")}
+              size="sm"
+            >
+              Star Wars
+            </Button>
+            <Button 
+              variant={filter === "marvel" ? "default" : "outline"}
+              onClick={() => setFilter("marvel")}
+              size="sm"
+            >
+              Marvel
+            </Button>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-sm">Sort by:</span>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recently-added">Recently Added</SelectItem>
+                <SelectItem value="highest-value">Highest Value</SelectItem>
+                <SelectItem value="lowest-value">Lowest Value</SelectItem>
+                <SelectItem value="oldest-first">Oldest First</SelectItem>
+                <SelectItem value="a-z">A-Z</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+      
+      {/* Pin Collection Grid */}
+      {isLoadingUserPins ? (
+        <div className="text-center py-16">
+          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p>Loading your collection...</p>
+        </div>
+      ) : sortedPins?.length === 0 ? (
+        <div className="text-center py-16 bg-card rounded-lg border border-border">
+          <PinOff className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-2xl font-bold mb-2">Your collection is empty</h2>
+          <p className="text-muted-foreground mb-6">Start building your pin collection today</p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" /> Add Your First Pin
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Pin to Collection</DialogTitle>
+                <DialogDescription>
+                  Select a pin to add to your collection.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="max-h-[60vh] overflow-y-auto space-y-4 my-4">
+                {isLoadingAllPins ? (
+                  <div className="text-center py-8">Loading pins...</div>
+                ) : pinsNotInCollection.length === 0 ? (
+                  <div className="text-center py-8">No more pins available to add</div>
+                ) : (
+                  pinsNotInCollection.map(pin => (
+                    <div 
+                      key={pin.id} 
+                      className="flex items-center gap-3 p-2 border border-border rounded-md"
+                    >
+                      <img 
+                        src={pin.imageUrl} 
+                        alt={pin.name} 
+                        className="w-12 h-12 object-cover rounded-md"
+                      />
+                      <div className="flex-1">
+                        <h3 className="font-medium">{pin.name}</h3>
+                        <p className="text-xs text-muted-foreground">{pin.collection}</p>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        onClick={() => addToCollectionMutation.mutate(pin.id)}
+                        disabled={addToCollectionMutation.isPending}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </div>
+              <DialogFooter>
+                <DialogTrigger asChild>
+                  <Button variant="outline">Close</Button>
+                </DialogTrigger>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {sortedPins.map((userPin) => (
+            <PinCard 
+              key={userPin.id} 
+              pin={userPin.pin} 
+              inCollection={true}
+              stats={{ 
+                haveCount: Math.floor(Math.random() * 1000), 
+                wantCount: Math.floor(Math.random() * 500)
+              }}
+              onToggleCollection={() => removeFromCollectionMutation.mutate(userPin.pinId)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

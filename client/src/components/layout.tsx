@@ -14,8 +14,8 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const isAuthenticated = useAuthStatus();
   const { user } = useAuth();
+  const isAuthenticated = !!user;
   
   return (
     <div className="flex min-h-screen">

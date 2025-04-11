@@ -239,7 +239,7 @@ export default function HomePage() {
             <div key={pin.id} className="bg-card border border-border rounded-xl overflow-hidden group">
               <div className="relative">
                 <img 
-                  src={pin.imageUrl} 
+                  src={pin.imageUrl || "/placeholder-pin.jpg"} 
                   alt={pin.name} 
                   className="w-full aspect-square object-cover group-hover:opacity-90 transition-opacity"
                 />

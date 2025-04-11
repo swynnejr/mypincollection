@@ -69,7 +69,7 @@ export function PinCard({
       <div className="relative">
         <Link href={`/pin/${id}`} className="block">
           <img 
-            src={imageUrl} 
+            src={imageUrl || "/placeholder-pin.jpg"} 
             alt={name} 
             className="w-full aspect-square object-cover"
           />
