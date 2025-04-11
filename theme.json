@@ -1,0 +1,44 @@
+{
+  "variant": "professional",
+  "primary": "hsl(222.2 47.4% 11.2%)",
+  "appearance": "light",
+  "radius": 0.5,
+  "themes": {
+    "light": {
+      "primary": "#3b82f6",
+      "secondary": "#6366f1",
+      "accent": "#ec4899",
+      "background": "#f9fafb",
+      "foreground": "#1f2937",
+      "card": "#ffffff",
+      "border": "#e5e7eb"
+    },
+    "dark": {
+      "primary": "#818cf8",
+      "secondary": "#a5b4fc",
+      "accent": "#f472b6",
+      "background": "#1e1e2d",
+      "foreground": "#e5e7eb",
+      "card": "#252538",
+      "border": "#383854"
+    },
+    "princess": {
+      "primary": "#f9a8d4",
+      "secondary": "#93c5fd",
+      "accent": "#fcd34d",
+      "background": "#fdf2f8",
+      "foreground": "#4b5563",
+      "card": "#ffffff",
+      "border": "#fbcfe8"
+    },
+    "villain": {
+      "primary": "#ef4444",
+      "secondary": "#b91c1c",
+      "accent": "#9333ea",
+      "background": "#1a1a1a",
+      "foreground": "#e5e7eb",
+      "card": "#262626",
+      "border": "#404040"
+    }
+  }
+}
