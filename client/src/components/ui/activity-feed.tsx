@@ -38,7 +38,7 @@ export function ActivityFeed({
         <CardTitle className="text-xl">{title}</CardTitle>
         {viewAllLink && (
           <Link href={viewAllLink}>
-            <a className="text-sm text-primary">View All</a>
+            <div className="text-sm text-primary cursor-pointer">View All</div>
           </Link>
         )}
       </CardHeader>
@@ -58,7 +58,7 @@ export function ActivityFeed({
                     <>
                       {activity.target.link ? (
                         <Link href={activity.target.link}>
-                          <a className="font-medium">{activity.target.name}</a>
+                          <span className="font-medium cursor-pointer text-primary">{activity.target.name}</span>
                         </Link>
                       ) : (
                         <span className="font-medium">{activity.target.name}</span>

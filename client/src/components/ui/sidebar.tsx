@@ -19,10 +19,12 @@ import {
   MessagesSquare,
   Settings,
   HelpCircle,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
   mobile?: boolean;
@@ -32,7 +34,7 @@ interface SidebarProps {
 export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
   ({ mobile = false, onClose }, ref) => {
     const [location] = useLocation();
-    const { user } = useAuth();
+    const { user, logoutMutation } = useAuth();
 
     const MenuItem = ({
       href,
@@ -210,6 +212,19 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
               </ul>
             </div>
           </nav>
+          
+          {user && (
+            <div className="mt-8 px-3">
+              <Button 
+                variant="outline" 
+                className="w-full flex items-center gap-2 text-destructive hover:text-destructive"
+                onClick={() => logoutMutation.mutate()}
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </Button>
+            </div>
+          )}
         </ScrollArea>
       </aside>
     );
