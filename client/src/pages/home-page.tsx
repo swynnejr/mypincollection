@@ -189,71 +189,85 @@ export default function HomePage() {
           <div className="container mx-auto">
             {/* Dashboard Header */}
             <div className="mb-8">
-              <h1 className="text-2xl md:text-3xl font-bold mb-2">My Pin Collection</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-2">
+                {user ? "My Pin Collection" : "Disney Pin Portfolio"}
+              </h1>
               <p className="text-sm text-muted-foreground">
                 Track your collection, discover new pins, and connect with the community
               </p>
               
               <div className="flex flex-wrap items-center gap-4 mt-4">
-                <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
-                  <PinOff className="h-5 w-5 text-primary" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Total Pins</div>
-                    <div className="font-bold text-lg">{totalPins}</div>
+                <AuthTooltip>
+                  <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
+                    <PinOff className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">Total Pins</div>
+                      <div className="font-bold text-lg">{totalPins}</div>
+                    </div>
                   </div>
-                </div>
+                </AuthTooltip>
                 
-                <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
-                  <Heart className="h-5 w-5 text-primary" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Want List</div>
-                    <div className="font-bold text-lg">32</div>
+                <AuthTooltip>
+                  <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
+                    <Heart className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">Want List</div>
+                      <div className="font-bold text-lg">32</div>
+                    </div>
                   </div>
-                </div>
+                </AuthTooltip>
                 
-                <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
-                  <RefreshCw className="h-5 w-5 text-primary" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Active Trades</div>
-                    <div className="font-bold text-lg">5</div>
+                <AuthTooltip>
+                  <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
+                    <RefreshCw className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">Active Trades</div>
+                      <div className="font-bold text-lg">5</div>
+                    </div>
                   </div>
-                </div>
+                </AuthTooltip>
                 
-                <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
-                  <Wallet className="h-5 w-5 text-primary" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Collection Value</div>
-                    <div className="font-bold text-lg">${collectionValue.toFixed(2)}</div>
+                <AuthTooltip>
+                  <div className="bg-card border border-border shadow-sm py-2 px-4 rounded-lg flex items-center gap-2">
+                    <Wallet className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">Collection Value</div>
+                      <div className="font-bold text-lg">${collectionValue.toFixed(2)}</div>
+                    </div>
                   </div>
-                </div>
+                </AuthTooltip>
               </div>
             </div>
             
             {/* Collection Filters */}
             <div className="mb-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="default">All Pins</Button>
-                  <Button variant="outline">Limited Edition</Button>
-                  <Button variant="outline">Classic Disney</Button>
-                  <Button variant="outline">Star Wars</Button>
-                  <Button variant="outline">Marvel</Button>
-                </div>
+                <AuthTooltip>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button variant="default">All Pins</Button>
+                    <Button variant="outline">Limited Edition</Button>
+                    <Button variant="outline">Classic Disney</Button>
+                    <Button variant="outline">Star Wars</Button>
+                    <Button variant="outline">Marvel</Button>
+                  </div>
+                </AuthTooltip>
                 
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">Sort by:</span>
-                  <Select defaultValue="recently-added">
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="recently-added">Recently Added</SelectItem>
-                      <SelectItem value="highest-value">Highest Value</SelectItem>
-                      <SelectItem value="oldest-first">Oldest First</SelectItem>
-                      <SelectItem value="a-z">A-Z</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <AuthTooltip>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">Sort by:</span>
+                    <Select defaultValue="recently-added">
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="recently-added">Recently Added</SelectItem>
+                        <SelectItem value="highest-value">Highest Value</SelectItem>
+                        <SelectItem value="oldest-first">Oldest First</SelectItem>
+                        <SelectItem value="a-z">A-Z</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </AuthTooltip>
               </div>
             </div>
             
@@ -275,19 +289,23 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               {/* Recent Activity */}
               <div className="lg:col-span-2">
-                <ActivityFeed 
-                  activities={activities} 
-                  viewAllLink="/activity"
-                />
+                <AuthTooltip>
+                  <ActivityFeed 
+                    activities={activities} 
+                    viewAllLink="/activity"
+                  />
+                </AuthTooltip>
               </div>
               
               {/* Messages */}
               <div>
-                <MessageList 
-                  messages={messages} 
-                  viewAllLink="/messages"
-                  onNewMessage={() => alert("New message")}
-                />
+                <AuthTooltip>
+                  <MessageList 
+                    messages={messages} 
+                    viewAllLink="/messages"
+                    onNewMessage={() => alert("New message")}
+                  />
+                </AuthTooltip>
               </div>
             </div>
             
