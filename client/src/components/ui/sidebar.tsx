@@ -48,16 +48,16 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       return (
         <li>
           <Link href={href}>
-            <a
+            <div
               className={cn(
-                "flex items-center gap-2 py-2 px-3 rounded hover:bg-primary/10 transition-colors",
+                "flex items-center gap-2 py-2 px-3 rounded hover:bg-primary/10 transition-colors cursor-pointer",
                 active && "text-primary font-semibold"
               )}
               onClick={() => mobile && onClose?.()}
             >
               <Icon className="h-4 w-4" />
               <span>{label}</span>
-            </a>
+            </div>
           </Link>
         </li>
       );
