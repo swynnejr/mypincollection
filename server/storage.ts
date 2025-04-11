@@ -27,6 +27,7 @@ export interface IStorage {
   getAllPins(): Promise<Pin[]>;
   getPin(id: number): Promise<Pin | undefined>;
   createPin(pin: InsertPin): Promise<Pin>;
+  updatePinValue(pinId: number, currentValue: number): Promise<Pin>;
   
   // User Pin Collection methods
   getUserPins(userId: number): Promise<(UserPin & { pin: Pin })[]>;
@@ -179,6 +180,21 @@ export class MemStorage implements IStorage {
     };
     this.pins.set(id, pin);
     return pin;
+  }
+  
+  async updatePinValue(pinId: number, currentValue: number): Promise<Pin> {
+    const pin = this.pins.get(pinId);
+    if (!pin) {
+      throw new Error(`Pin with id ${pinId} not found`);
+    }
+    
+    const updatedPin = {
+      ...pin,
+      currentValue
+    };
+    
+    this.pins.set(pinId, updatedPin);
+    return updatedPin;
   }
 
   async getUserPins(userId: number): Promise<(UserPin & { pin: Pin })[]> {

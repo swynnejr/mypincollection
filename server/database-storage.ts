@@ -159,6 +159,20 @@ export class DatabaseStorage implements IStorage {
     const [pin] = await db.select().from(pins).where(eq(pins.id, id));
     return pin;
   }
+  
+  async updatePinValue(pinId: number, currentValue: number): Promise<Pin> {
+    const [pin] = await db
+      .update(pins)
+      .set({ currentValue })
+      .where(eq(pins.id, pinId))
+      .returning();
+      
+    if (!pin) {
+      throw new Error(`Pin with id ${pinId} not found`);
+    }
+    
+    return pin;
+  }
 
   async createPin(insertPin: InsertPin): Promise<Pin> {
     const [pin] = await db.insert(pins).values(insertPin).returning();

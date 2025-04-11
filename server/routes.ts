@@ -238,11 +238,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updatePinValue(pinId, price);
         
         // Store this price in the price history
-        const now = new Date();
         const priceHistoryEntry = {
           pinId,
           price,
-          recordedAt: now
+          source: 'eBay'
         };
         
         await storage.addPinPriceHistory(priceHistoryEntry);

@@ -52,6 +52,14 @@ export const api = {
     getPriceHistory: async (id: number): Promise<PinPriceHistory[]> => {
       const res = await apiRequest("GET", `/api/pins/${id}/price-history`);
       return await res.json();
+    },
+    getEbayPrice: async (id: number): Promise<Pin> => {
+      const res = await apiRequest("GET", `/api/pins/${id}/ebay-price`);
+      return await res.json();
+    },
+    getEbayPriceHistory: async (id: number): Promise<Array<{date: string, price: number}>> => {
+      const res = await apiRequest("GET", `/api/pins/${id}/ebay-price-history`);
+      return await res.json();
     }
   },
   
