@@ -86,7 +86,57 @@ export async function searchEbayItems(
     return response.data;
   } catch (error) {
     console.error('Error searching eBay items:', error);
+    
+    // If we're in development mode, return mock data (for testing)
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Using fallback mock data for eBay API in development mode');
+      return {
+        total: 0,
+        itemSummaries: []
+      };
+    }
+    
     throw new Error('Failed to search eBay items');
+  }
+}
+
+/**
+ * Search for Disney pins using the Browse API (more appropriate for images)
+ * This API provides better image quality and more details
+ */
+export async function searchDisneyPins(
+  searchTerms: string,
+  limit: number = 10
+): Promise<any> {
+  try {
+    // Build the search URL with query parameters
+    let url = `${BASE_URL}/buy/browse/v1/item_summary/search?`;
+    
+    // Add search terms (specifically for Disney pins)
+    url += `q=${encodeURIComponent(`Disney pin ${searchTerms}`)}`;
+    
+    // Add limit
+    url += `&limit=${limit}`;
+    
+    // Add category filter for pins/collectibles
+    url += '&category_ids=50310'; // Disney Pins category
+    
+    // Get highest quality images
+    url += '&fieldgroups=EXTENDED';
+    
+    // Make the API request
+    const headers = await getEbayApiHeaders();
+    const response = await axios.get(url, { headers });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error searching Disney pins on eBay:', error);
+    
+    // Return empty data if there's an error
+    return {
+      total: 0,
+      itemSummaries: []
+    };
   }
 }
 

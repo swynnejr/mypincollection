@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { insertPinSchema, insertUserPinSchema, insertWantListSchema, insertMessageSchema, insertPinPriceHistorySchema } from "@shared/schema";
-import { getDisneyPinAveragePrice, getDisneyPinPriceHistory } from "./utils/ebay-api";
+import { getDisneyPinAveragePrice, getDisneyPinPriceHistory, searchDisneyPins } from "./utils/ebay-api";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -306,6 +306,172 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(priceHistory);
     } catch (err) {
       res.status(500).json({ message: "Failed to fetch eBay price history" });
+    }
+  });
+
+  // Search for Disney pins on eBay
+  app.get("/api/ebay/search", async (req, res) => {
+    try {
+      const searchTerm = req.query.q as string;
+      if (!searchTerm) {
+        return res.status(400).json({ message: "Search term is required" });
+      }
+      
+      // Search for the pins on eBay
+      const searchResults = await searchDisneyPins(searchTerm);
+      
+      // Return the search results
+      res.json(searchResults);
+    } catch (err) {
+      console.error("Error searching eBay for pins:", err);
+      res.status(500).json({ message: "Failed to search eBay for pins" });
+    }
+  });
+
+  // Import a pin from eBay into our database (admin only)
+  app.post("/api/admin/import-pin-from-ebay", async (req, res) => {
+    // Ensure user is authenticated and is admin
+    if (!req.isAuthenticated() || !(req.user!.id === 1 || req.user!.username === "devtest")) {
+      return res.status(403).json({ message: "Not authorized - admin access required" });
+    }
+    
+    try {
+      const { name, imageUrl, price, collection, category, description } = req.body;
+      
+      if (!name || !imageUrl) {
+        return res.status(400).json({ message: "Name and imageUrl are required" });
+      }
+      
+      // Create the pin in our database
+      const pin = await storage.createPin({
+        name,
+        imageUrl,
+        currentValue: parseFloat(price) || 0,
+        collection: collection || "Disney Collection",
+        category: category || "Disney Pins",
+        description: description || `Authentic Disney Pin: ${name}`,
+        isLimitedEdition: false,
+        releaseDate: null
+      });
+      
+      // Add initial price history
+      if (pin && price) {
+        await storage.addPinPriceHistory({
+          pinId: pin.id,
+          price: parseFloat(price) || 0,
+          source: "eBay Import"
+        });
+      }
+      
+      res.status(201).json(pin);
+    } catch (err) {
+      console.error("Error importing pin from eBay:", err);
+      res.status(500).json({ message: "Failed to import pin" });
+    }
+  });
+
+  // Endpoint to cache pins by query
+  app.get("/api/ebay/cache-pins", async (req, res) => {
+    // Ensure user is authenticated and is admin
+    if (!req.isAuthenticated() || !(req.user!.id === 1 || req.user!.username === "devtest")) {
+      return res.status(403).json({ message: "Not authorized - admin access required" });
+    }
+    
+    try {
+      const searchTerm = req.query.q as string;
+      if (!searchTerm) {
+        return res.status(400).json({ message: "Search term is required" });
+      }
+      
+      // Search for pins on eBay
+      const searchResults = await searchDisneyPins(searchTerm);
+      
+      // Process and store the pins in our database
+      const savedPins = [];
+      
+      if (searchResults.itemSummaries && searchResults.itemSummaries.length > 0) {
+        for (const item of searchResults.itemSummaries) {
+          try {
+            // Extract details from the eBay item
+            const name = item.title;
+            const imageUrl = item.image?.imageUrl || item.thumbnailImages?.[0]?.imageUrl;
+            const price = item.price?.value ? parseFloat(item.price.value) : 0;
+            
+            // Skip items without required data
+            if (!name || !imageUrl || !price) continue;
+            
+            // Determine collection and category from the title or search term
+            let collection = "Disney Collection";
+            let category = "Disney Pins";
+            
+            // Try to extract collection from the search term
+            if (searchTerm.toLowerCase().includes("star wars")) {
+              collection = "Star Wars";
+              category = "Star Wars";
+            } else if (searchTerm.toLowerCase().includes("princess") || 
+                      searchTerm.toLowerCase().includes("ariel") ||
+                      searchTerm.toLowerCase().includes("belle") ||
+                      searchTerm.toLowerCase().includes("cinderella") ||
+                      searchTerm.toLowerCase().includes("jasmine")) {
+              collection = "Disney Princesses";
+              category = "Princesses";
+            } else if (searchTerm.toLowerCase().includes("villain") ||
+                      searchTerm.toLowerCase().includes("maleficent") ||
+                      searchTerm.toLowerCase().includes("ursula") ||
+                      searchTerm.toLowerCase().includes("jafar") ||
+                      searchTerm.toLowerCase().includes("evil queen")) {
+              collection = "Disney Villains";
+              category = "Villains";
+            } else if (searchTerm.toLowerCase().includes("mickey") ||
+                      searchTerm.toLowerCase().includes("minnie") ||
+                      searchTerm.toLowerCase().includes("donald") ||
+                      searchTerm.toLowerCase().includes("goofy")) {
+              collection = "Mickey and Friends";
+              category = "Classic Disney";
+            } else if (searchTerm.toLowerCase().includes("haunted") ||
+                      searchTerm.toLowerCase().includes("splash") ||
+                      searchTerm.toLowerCase().includes("space") ||
+                      searchTerm.toLowerCase().includes("pirates")) {
+              collection = "Disney Parks";
+              category = "Park Attractions";
+            }
+            
+            // Create the pin in our database
+            const pin = await storage.createPin({
+              name,
+              imageUrl,
+              currentValue: price,
+              collection,
+              category,
+              description: `Authentic Disney Pin: ${name}`,
+              isLimitedEdition: false,
+              releaseDate: null
+            });
+            
+            // Add initial price history
+            if (pin) {
+              await storage.addPinPriceHistory({
+                pinId: pin.id,
+                price,
+                source: "eBay Import"
+              });
+              
+              savedPins.push(pin);
+            }
+          } catch (itemErr) {
+            console.error("Error importing individual pin:", itemErr);
+            // Continue with the next item
+          }
+        }
+      }
+      
+      res.json({
+        message: `Successfully cached ${savedPins.length} pins from eBay`,
+        pins: savedPins
+      });
+    } catch (err) {
+      console.error("Error caching pins from eBay:", err);
+      res.status(500).json({ message: "Failed to cache pins from eBay" });
     }
   });
 
