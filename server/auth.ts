@@ -72,6 +72,8 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
+      console.log("Registration request body:", req.body);
+      
       // Validate username is not empty
       if (!req.body.username || req.body.username.trim() === '') {
         return res.status(400).send("Username cannot be empty");
@@ -82,17 +84,27 @@ export function setupAuth(app: Express) {
         return res.status(400).send("Username already exists");
       }
 
-      const user = await storage.createUser({
-        ...req.body,
-        username: req.body.username.trim(), // Trim whitespace
+      // Create user data with nulls for optional fields if not provided
+      const userData = {
+        username: req.body.username.trim(),
         password: await hashPassword(req.body.password),
-      });
+        displayName: req.body.displayName || null,
+        email: req.body.email || null,
+        avatarUrl: req.body.avatarUrl || null
+      };
+      
+      console.log("Processed user data:", userData);
+      
+      const user = await storage.createUser(userData);
+      
+      console.log("Created user:", user);
 
       req.login(user, (err) => {
         if (err) return next(err);
         res.status(201).json(user);
       });
     } catch (err) {
+      console.error("Registration error:", err);
       next(err);
     }
   });
