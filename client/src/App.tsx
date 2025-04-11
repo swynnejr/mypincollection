@@ -25,6 +25,7 @@ function Router() {
             <ProtectedRoute path="/collection" component={CollectionPage} />
             <ProtectedRoute path="/wantlist" component={WantListPage} />
             <ProtectedRoute path="/pin/:id" component={PinDetailPage} />
+            <ProtectedRoute path="/admin" component={AdminPage} />
             <Route component={NotFound} />
           </Switch>
         </Layout>

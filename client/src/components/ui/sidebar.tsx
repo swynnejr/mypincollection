@@ -209,6 +209,14 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
                   label="Help & Support"
                   active={location === "/support"}
                 />
+                {user && user.id === 1 && (
+                  <MenuItem
+                    href="/admin"
+                    icon={Shield}
+                    label="Admin Dashboard"
+                    active={location === "/admin"}
+                  />
+                )}
               </ul>
             </div>
           </nav>
