@@ -5,10 +5,8 @@ import { getEbayApiHeaders } from './ebay-auth';
 const EBAY_SANDBOX_BASE_URL = 'https://api.sandbox.ebay.com';
 const EBAY_PRODUCTION_BASE_URL = 'https://api.ebay.com';
 
-// Use sandbox for development, production for actual deployment
-const BASE_URL = process.env.NODE_ENV === 'production' 
-  ? EBAY_PRODUCTION_BASE_URL 
-  : EBAY_SANDBOX_BASE_URL;
+// Always use production API to get real data
+const BASE_URL = EBAY_PRODUCTION_BASE_URL;
 
 export interface EbayItemSummary {
   itemId: string;
