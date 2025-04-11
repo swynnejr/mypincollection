@@ -15,6 +15,8 @@ import {
 import { Pin } from "@shared/schema";
 import { PriceChart } from "@/components/ui/price-chart";
 import { Badge } from "@/components/ui/badge";
+import { AuthTooltip } from "@/components/ui/auth-tooltip";
+import { useAuthStatus } from "@/lib/protected-route";
 
 interface PinCardProps {
   pin: Pin;
@@ -46,6 +48,7 @@ export function PinCard({
   } = pin;
 
   const [isHovering, setIsHovering] = useState(false);
+  const isAuthenticated = useAuthStatus();
 
   // Calculate price change (mock data for now)
   const priceChange = {
@@ -64,29 +67,31 @@ export function PinCard({
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="relative">
-        <Link href={`/pin/${id}`}>
-          <a className="block">
-            <img 
-              src={imageUrl} 
-              alt={name} 
-              className="w-full aspect-square object-cover"
-            />
-          </a>
+        <Link href={`/pin/${id}`} className="block">
+          <img 
+            src={imageUrl} 
+            alt={name} 
+            className="w-full aspect-square object-cover"
+          />
         </Link>
         <div className="absolute top-2 right-2 flex flex-col gap-1">
-          <button 
-            onClick={(e) => {
-              e.preventDefault();
-              onToggleWantList?.();
-            }}
-            className="bg-white bg-opacity-80 p-1.5 rounded-full hover:bg-opacity-100 transition-all"
-            style={{ color: inWantList ? 'var(--color-primary)' : 'rgb(156, 163, 175)' }}
-          >
-            {inWantList ? <HeartCrack className="h-4 w-4" /> : <Heart className="h-4 w-4" />}
-          </button>
-          <button className="bg-white bg-opacity-80 p-1.5 rounded-full text-gray-700 hover:bg-opacity-100 transition-all">
-            <Share className="h-4 w-4" />
-          </button>
+          <AuthTooltip disabledContent="Login to add pins to your want list">
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                onToggleWantList?.();
+              }}
+              className="bg-white bg-opacity-80 p-1.5 rounded-full hover:bg-opacity-100 transition-all"
+              style={{ color: inWantList ? 'var(--color-primary)' : 'rgb(156, 163, 175)' }}
+            >
+              {inWantList ? <HeartCrack className="h-4 w-4" /> : <Heart className="h-4 w-4" />}
+            </button>
+          </AuthTooltip>
+          <AuthTooltip disabledContent="Login to share this pin">
+            <button className="bg-white bg-opacity-80 p-1.5 rounded-full text-gray-700 hover:bg-opacity-100 transition-all">
+              <Share className="h-4 w-4" />
+            </button>
+          </AuthTooltip>
         </div>
         <div className="absolute bottom-2 left-2">
           {isLimitedEdition && (
