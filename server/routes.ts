@@ -12,12 +12,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Admin routes
   app.post("/api/admin/reseed-database", async (req, res) => {
-    // Ensure user is authenticated and is admin (user.id === 1)
+    // Ensure user is authenticated and is admin (user.id === 1 or username === "devtest")
     if (!req.isAuthenticated()) {
       return res.status(401).json({ success: false, message: "Not authenticated" });
     }
     
-    if (req.user!.id !== 1) {
+    // Admin check - user.id === 1 or username === "devtest"
+    if (!(req.user!.id === 1 || req.user!.username === "devtest")) {
       return res.status(403).json({ success: false, message: "Not authorized - admin access required" });
     }
     

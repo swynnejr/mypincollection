@@ -209,7 +209,7 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
                   label="Help & Support"
                   active={location === "/support"}
                 />
-                {user && user.id === 1 && (
+                {user && (user.id === 1 || user.username === "devtest") && (
                   <MenuItem
                     href="/admin"
                     icon={Shield}
