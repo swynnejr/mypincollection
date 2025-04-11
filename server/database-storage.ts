@@ -129,8 +129,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db.insert(users).values(insertUser).returning();
-    return user;
+    console.log("Creating user with data:", insertUser);
+    
+    // Make sure optional fields are properly set to null if empty or undefined
+    const userData = {
+      ...insertUser,
+      displayName: insertUser.displayName || null,
+      email: insertUser.email || null,
+      avatarUrl: insertUser.avatarUrl || null
+    };
+    
+    console.log("Processed user data for database:", userData);
+    
+    try {
+      const [user] = await db.insert(users).values(userData).returning();
+      console.log("Successfully created user:", user);
+      return user;
+    } catch (error) {
+      console.error("Database error creating user:", error);
+      throw error;
+    }
   }
 
   async getAllPins(): Promise<Pin[]> {

@@ -78,23 +78,43 @@ export default function AuthPage() {
     loginMutation.mutate(values);
   };
 
-  const onRegisterSubmit = (values: z.infer<typeof registerSchema>) => {
-    // Log the form values for debugging
-    console.log("Register form values:", values);
+  const onRegisterSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     
-    const { confirmPassword, ...userData } = values;
+    // Ensure form validation
+    const isValid = await registerForm.trigger();
     
-    // Ensure values are properly trimmed and default to empty string instead of null
-    const processedData = {
-      username: values.username.trim(),
-      password: values.password,
-      displayName: values.displayName?.trim() || "",
-      email: values.email?.trim() || "",
-      avatarUrl: values.avatarUrl?.trim() || ""
+    if (!isValid) {
+      console.log("Form validation failed:", registerForm.formState.errors);
+      return;
+    }
+    
+    // Get form data directly from the form
+    const formData = registerForm.getValues();
+    console.log("Register form values:", formData);
+    
+    // Create cleaned data for submission
+    const userData = {
+      username: formData.username,
+      password: formData.password,
+      displayName: formData.displayName || "",
+      email: formData.email || "",
+      avatarUrl: formData.avatarUrl || ""
     };
     
-    console.log("Processed register data:", processedData);
-    registerMutation.mutate(processedData);
+    console.log("Final register data:", userData);
+    
+    // Check if username is empty
+    if (!userData.username) {
+      registerForm.setError("username", { 
+        type: "manual", 
+        message: "Username is required" 
+      });
+      return;
+    }
+    
+    // Submit the data
+    registerMutation.mutate(userData);
   };
 
   return (
@@ -236,72 +256,72 @@ export default function AuthPage() {
               </CardHeader>
               <CardContent>
                 <Form {...registerForm}>
-                  <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
-                    <FormField
-                      control={registerForm.control}
-                      name="username"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Username</FormLabel>
-                          <FormControl>
-                            <Input placeholder="username" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                  <form onSubmit={onRegisterSubmit} className="space-y-4">
+                    <div className="space-y-1">
+                      <label htmlFor="username" className="text-sm font-medium">Username</label>
+                      <input
+                        id="username"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="username"
+                        {...registerForm.register("username", { required: true })}
+                      />
+                      {registerForm.formState.errors.username && (
+                        <p className="text-sm font-medium text-destructive">Username is required</p>
                       )}
-                    />
-                    <FormField
-                      control={registerForm.control}
-                      name="displayName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Display Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Display Name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label htmlFor="displayName" className="text-sm font-medium">Display Name</label>
+                      <input
+                        id="displayName"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Display Name"
+                        {...registerForm.register("displayName")}
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label htmlFor="email" className="text-sm font-medium">Email</label>
+                      <input
+                        id="email"
+                        type="email"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="email@example.com"
+                        {...registerForm.register("email")}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label htmlFor="password" className="text-sm font-medium">Password</label>
+                      <input
+                        id="password"
+                        type="password"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="••••••••"
+                        {...registerForm.register("password", { required: true, minLength: 6 })}
+                      />
+                      {registerForm.formState.errors.password && (
+                        <p className="text-sm font-medium text-destructive">Password is required (min 6 characters)</p>
                       )}
-                    />
-                    <FormField
-                      control={registerForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="email@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</label>
+                      <input
+                        id="confirmPassword"
+                        type="password"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="••••••••"
+                        {...registerForm.register("confirmPassword", { 
+                          required: true,
+                          validate: value => value === registerForm.getValues("password") || "Passwords don't match"
+                        })}
+                      />
+                      {registerForm.formState.errors.confirmPassword && (
+                        <p className="text-sm font-medium text-destructive">
+                          {registerForm.formState.errors.confirmPassword.message || "Please confirm your password"}
+                        </p>
                       )}
-                    />
-                    <FormField
-                      control={registerForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <Input type="password" placeholder="••••••••" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={registerForm.control}
-                      name="confirmPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Confirm Password</FormLabel>
-                          <FormControl>
-                            <Input type="password" placeholder="••••••••" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    </div>
                     <Button
                       type="submit"
                       className="w-full"
