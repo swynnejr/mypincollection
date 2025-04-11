@@ -1,49 +1,43 @@
-import { useState } from "react";
-import { Palette } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Moon, Sun, Wand2, SkullIcon } from "lucide-react";
 
 export function ThemeSelector() {
   const { theme, setTheme } = useTheme();
-  const [open, setOpen] = useState(false);
-
-  const themes = [
-    { value: "light", label: "Light Theme", color: "#3b82f6" },
-    { value: "dark", label: "Dark Theme", color: "#818cf8" },
-    { value: "princess", label: "Princess Theme", color: "#f9a8d4" },
-    { value: "villain", label: "Villain Theme", color: "#ef4444" },
-  ];
-
+  
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger className="p-2 rounded-full hover:bg-primary/10 transition-colors">
-        <Palette className="h-5 w-5" />
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          {theme === 'light' && <Sun className="h-5 w-5" />}
+          {theme === 'dark' && <Moon className="h-5 w-5" />}
+          {theme === 'princess' && <Wand2 className="h-5 w-5" />}
+          {theme === 'villain' && <SkullIcon className="h-5 w-5" />}
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        {themes.map((t) => (
-          <DropdownMenuItem
-            key={t.value}
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => {
-              setTheme(t.value as any);
-              setOpen(false);
-            }}
-          >
-            <span
-              className="w-4 h-4 rounded-full"
-              style={{ backgroundColor: t.color }}
-            />
-            <span>{t.label}</span>
-            {theme === t.value && (
-              <span className="ml-auto text-primary">✓</span>
-            )}
-          </DropdownMenuItem>
-        ))}
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme('light')}>
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Light</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>
+          <Moon className="mr-2 h-4 w-4" />
+          <span>Dark</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('princess')}>
+          <Wand2 className="mr-2 h-4 w-4" />
+          <span>Princess</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('villain')}>
+          <SkullIcon className="mr-2 h-4 w-4" />
+          <span>Villain</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

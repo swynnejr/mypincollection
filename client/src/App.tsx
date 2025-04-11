@@ -11,16 +11,23 @@ import CollectionPage from "@/pages/collection-page";
 import PinDetailPage from "@/pages/pin-detail-page";
 import WantListPage from "@/pages/wantlist-page";
 import { ProtectedRoute } from "./lib/protected-route";
+import Layout from "@/components/layout";
 
 function Router() {
   return (
     <Switch>
-      <ProtectedRoute path="/" component={HomePage} />
       <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/collection" component={CollectionPage} />
-      <ProtectedRoute path="/wantlist" component={WantListPage} />
-      <ProtectedRoute path="/pin/:id" component={PinDetailPage} />
-      <Route component={NotFound} />
+      <Route path="*">
+        <Layout>
+          <Switch>
+            <ProtectedRoute path="/" component={HomePage} />
+            <ProtectedRoute path="/collection" component={CollectionPage} />
+            <ProtectedRoute path="/wantlist" component={WantListPage} />
+            <ProtectedRoute path="/pin/:id" component={PinDetailPage} />
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+      </Route>
     </Switch>
   );
 }
