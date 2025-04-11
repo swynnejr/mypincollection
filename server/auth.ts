@@ -72,6 +72,11 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
+      // Validate username is not empty
+      if (!req.body.username || req.body.username.trim() === '') {
+        return res.status(400).send("Username cannot be empty");
+      }
+      
       const existingUser = await storage.getUserByUsername(req.body.username);
       if (existingUser) {
         return res.status(400).send("Username already exists");
@@ -79,6 +84,7 @@ export function setupAuth(app: Express) {
 
       const user = await storage.createUser({
         ...req.body,
+        username: req.body.username.trim(), // Trim whitespace
         password: await hashPassword(req.body.password),
       });
 

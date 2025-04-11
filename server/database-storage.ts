@@ -119,7 +119,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
+    // If username is empty, don't try to look it up
+    if (!username || username.trim() === '') {
+      return undefined;
+    }
+    
+    const [user] = await db.select().from(users).where(eq(users.username, username.trim()));
     return user;
   }
 
