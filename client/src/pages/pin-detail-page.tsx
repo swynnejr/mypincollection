@@ -224,75 +224,6 @@ export default function PinDetailPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <MobileSidebar />
-              <Link href="/">
-                <a className="flex items-center gap-2">
-                  <PinOff className="h-6 w-6 text-primary" />
-                  <h1 className="text-xl font-bold">Pin Portfolio</h1>
-                </a>
-              </Link>
-            </div>
-            
-            <div className="hidden md:block flex-1 max-w-md mx-4">
-              <div className="relative">
-                <input
-                  type="text" 
-                  placeholder="Search pins, collections, users..." 
-                  className="w-full py-2 px-10 rounded-full text-sm bg-card border border-border"
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
-                <Bell className="h-5 w-5" />
-                <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-[10px]">3</Badge>
-              </button>
-              
-              <button className="relative p-2 rounded-full hover:bg-primary/10 transition-colors">
-                <MessageSquare className="h-5 w-5" />
-                <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-[10px]">2</Badge>
-              </button>
-              
-              <ThemeSelector />
-              
-              <div className="flex items-center gap-2">
-                <Avatar>
-                  <AvatarImage src={user?.avatarUrl || "https://i.pravatar.cc/150?img=32"} alt={user?.displayName || user?.username || "User"} />
-                  <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium hidden md:inline">
-                  {user?.displayName || user?.username}
-                </span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="md:hidden mt-3">
-            <div className="relative">
-              <input
-                type="text" 
-                placeholder="Search pins, collections..." 
-                className="w-full py-2 px-10 rounded-full text-sm bg-card border border-border"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
-          </div>
-        </div>
-      </header>
-      
-      <div className="flex-1 flex relative">
-        {/* Sidebar */}
-        <div className="hidden md:block">
-          <Sidebar />
-        </div>
-        
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="container mx-auto">
@@ -610,7 +541,7 @@ export default function PinDetailPage() {
             </div>
           </div>
         </main>
-      </div>
     </div>
+    
   );
 }

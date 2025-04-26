@@ -6,7 +6,7 @@ const EBAY_SANDBOX_BASE_URL = 'https://api.sandbox.ebay.com';
 const EBAY_PRODUCTION_BASE_URL = 'https://api.ebay.com';
 
 // Always use production API to get real data
-const BASE_URL = EBAY_PRODUCTION_BASE_URL;
+const BASE_URL = EBAY_SANDBOX_BASE_URL;
 
 export interface EbayItemSummary {
   itemId: string;
@@ -80,19 +80,21 @@ export async function searchEbayItems(
     // Make the API request
     const headers = await getEbayApiHeaders();
     const response = await axios.get(url, { headers });
+
+    console.log("searchEbayItems response: ", response.data ?? "no data");
     
     return response.data;
   } catch (error) {
     console.error('Error searching eBay items:', error);
     
     // If we're in development mode, return mock data (for testing)
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Using fallback mock data for eBay API in development mode');
-      return {
-        total: 0,
-        itemSummaries: []
-      };
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //   console.warn('Using fallback mock data for eBay API in development mode');
+    //   return {
+    //     total: 0,
+    //     itemSummaries: []
+    //   };
+    // }
     
     throw new Error('Failed to search eBay items');
   }
@@ -125,6 +127,8 @@ export async function searchDisneyPins(
     // Make the API request
     const headers = await getEbayApiHeaders();
     const response = await axios.get(url, { headers });
+
+    console.log("searchDisneyPins response: ", response.data ?? "no data");
     
     return response.data;
   } catch (error) {
@@ -156,6 +160,8 @@ export async function getDisneyPinAveragePrice(pinName: string): Promise<number>
     if (!searchResult.itemSummaries || searchResult.itemSummaries.length === 0) {
       return 0; // No items found
     }
+
+    console.log("getDisneyPinAveragePrice searchResult: ", searchResult);
 
     // Calculate the average price from the results
     const totalPrice = searchResult.itemSummaries.reduce((sum, item) => {
@@ -189,6 +195,7 @@ export async function getDisneyPinPriceHistory(pinName: string): Promise<Array<{
     if (!searchResult.itemSummaries || searchResult.itemSummaries.length === 0) {
       return []; // No items found
     }
+    console.log("getDisneyPinPriceHistory searchResult: ", searchResult);
 
     // Extract the price history from the results
     return searchResult.itemSummaries
